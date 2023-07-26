@@ -16,39 +16,55 @@ public class ImageEditor {
 
     public ImageEditor(Data data) {
         try {
+            //Help variable for specific operation with Strings
+            String temp;
+
+            //Load image
             imageIn = ImageIO.read(new File("giftCard.png"));
             System.out.println("image load success");
 
+            //New image setup
             imageOut = new BufferedImage(imageIn.getWidth(), imageIn.getHeight(), BufferedImage.TYPE_INT_RGB);
             Graphics2D g = imageOut.createGraphics();
             System.out.println(imageIn.getHeight());
-
-            //TODO: CHECK PRICE SIZE - 3/4/5 digit price -> different layout location
-
-            //draw price
             g.drawImage(imageIn, 0,0, null);
-            g.setFont(new Font("Tw Cen MT", Font.PLAIN, 286));
+
+            //draw price - depends on int value (number of digits)
+            g.setFont(new Font("Tw Cen MT", Font.PLAIN, 288));
             g.setColor(new Color(48,48,48));
-            g.drawString(data.getPrice() + " Kč", 825,  640);
+            if(data.getPrice()<1000){
+                g.drawString(data.getPrice() + " Kč", 910,  640);
+                System.out.println("100-999");
+            } else if (data.getPrice()<10000){
+                g.drawString(data.getPrice() + " Kč", 810,  640);
+                System.out.println("1000-9999");
+            } else if(data.getPrice()<100000){
+                temp = String.valueOf(data.getPrice());
+                temp = temp.substring(0,2) + " " + temp.substring(2);
+                g.drawString(temp+ " Kč", 710,  640);
+                System.out.println("10000-99999");
+            }
+
+            //draw date
+            g.setFont(new Font("Arial", Font.TRUETYPE_FONT, 26));
+            g.drawString(String.valueOf(data.getExpirationDate()), 2390,  766);
 
             //draw code
             g.setFont(new Font("Arial", Font.BOLD, 46));
             g.setColor(Color.BLACK);
-            g.drawString(String.valueOf(data.getVerificationCode()), 2255,  715);
-
-            //draw date
-            g.setFont(new Font("Arial", Font.TRUETYPE_FONT, 26));
-            g.setColor(new Color(48,48,48));
-            g.drawString(String.valueOf(data.getExpirationDate()), 2390,  766);
-
+            g.drawString(String.valueOf(data.getVerificationCode()), 2260,  715);
 
             g.dispose();
 
-            File file = new File("newImage.png");
+            //Export file
+            temp = data.getExpirationDate();
+            temp = temp.replace(".", "_");
+            temp = "kupon_" + temp + "_" +data.getVerificationCode() + ".png";
+            File file = new File(temp);
             if(file.exists()){
                 file.delete();
             }
-            ImageIO.write(imageOut, "png", new File("newImage.png"));
+            ImageIO.write(imageOut, "png", new File(temp));
             System.out.println("image out success");
 
 

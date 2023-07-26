@@ -9,6 +9,8 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
+import java.awt.event.KeyListener;
 import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
@@ -114,8 +116,13 @@ public class MainFrame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnConfirm) {
             try {
+                //Checks for legit data
                 if (txtDate.getText() == null) {
                     JOptionPane.showMessageDialog(this, "Please write the day as e.g. 31.04.2023");
+                    return;
+                }
+                if(Integer.parseInt(txtPrice.getText())<100 || Integer.parseInt(txtPrice.getText())>10000){
+                    JOptionPane.showMessageDialog(this, "Out of price limit (100Kč - 10 000Kč)");
                     return;
                 }
                 data = new Data(
@@ -124,9 +131,10 @@ public class MainFrame extends JFrame implements ActionListener {
                         generateRandomSequence()
                 );
 
+                //todo: price needs to be in range 100-20000 or else error
+
                 new ImageEditor(data);
                 new FileEditor();
-
 
                 //TODO: CONFIRMATION OF SUCCESS
 
@@ -140,7 +148,10 @@ public class MainFrame extends JFrame implements ActionListener {
             txtPrice.setText("");
             txtDate.setValue(null);
         }
+
     }
+
+
 
     private SimpleDateFormat dateFormat() {
         return new SimpleDateFormat("dd.MM.yyyy");
