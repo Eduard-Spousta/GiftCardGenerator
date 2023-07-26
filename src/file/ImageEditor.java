@@ -9,7 +9,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class ImageEditor {
+public class ImageEditor implements Editor{
     private BufferedImage imageIn;
     private BufferedImage imageOut;
 
@@ -65,13 +65,8 @@ public class ImageEditor {
             temp = data.getExpirationDate();
             temp = temp.replace(".", "_");
             temp = "kupon_" + temp + "_" +data.getVerificationCode() + ".png";
-            File file = new File(temp);
-            if(file.exists()){
-                file.delete();
-            }
-            ImageIO.write(imageOut, "png", new File(temp));
-            System.out.println("image out success");
 
+            ImageIO.write(imageOut, "png", new File(checkForDirectory() + File.separator + temp));
 
         } catch (IOException e) {
             System.out.println("Can not load image giftCard.png. Please contact admin" + e.getMessage());

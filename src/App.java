@@ -7,5 +7,7 @@ public class App {
         new MainFrame();
 
         //TODO: MAKE .JAR APP
+        //TODO: /** */ comments
+        //TODO: REMOVE ALL WARNINGS
     }
 }
