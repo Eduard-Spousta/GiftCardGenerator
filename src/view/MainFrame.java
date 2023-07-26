@@ -1,5 +1,7 @@
 package view;
 
+import file.FileEditor;
+import file.ImageEditor;
 import model.Data;
 
 import javax.swing.*;
@@ -7,6 +9,7 @@ import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.File;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -117,11 +120,13 @@ public class MainFrame extends JFrame implements ActionListener {
                 }
                 data = new Data(
                         Integer.parseInt(txtPrice.getText()),
-                        (Date) txtDate.getValue(),
+                        txtDate.getText(),
                         generateRandomSequence()
                 );
 
-                System.out.println(data);
+                new ImageEditor(data);
+                new FileEditor();
+
 
                 //TODO: CONFIRMATION OF SUCCESS
 

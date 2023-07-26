@@ -4,10 +4,10 @@ import java.util.Date;
 
 public class Data {
     private int price;
-    private Date expirationDate;
+    private String expirationDate;
     private String verificationCode;
 
-    public Data(int price, Date expirationDate, String verificationCode) {
+    public Data(int price, String expirationDate, String verificationCode) {
         this.price = price;
         this.expirationDate = expirationDate;
         this.verificationCode = verificationCode;
@@ -21,11 +21,11 @@ public class Data {
         this.price = price;
     }
 
-    public Date getExpirationDate() {
+    public String getExpirationDate() {
         return expirationDate;
     }
 
-    public void setExpirationDate(Date expirationDate) {
+    public void setExpirationDate(String expirationDate) {
         this.expirationDate = expirationDate;
     }
 
