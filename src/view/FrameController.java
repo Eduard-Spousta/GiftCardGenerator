@@ -15,20 +15,24 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Random;
 
-public class MainFrame extends JFrame implements ActionListener {
-    private JButton btnReset;
-    private JButton btnConfirm;
-    private JFormattedTextField txtDate;
-    private JTextField txtPrice;
-    private Data data;
-    private Random random = new Random();
+/**
+ * GUI Controller for the application
+ */
+public class FrameController extends JFrame implements ActionListener {
+    private final JButton btnReset;
+    private final JButton btnConfirm;
+    private final JFormattedTextField txtDate;
+    private final JTextField txtPrice;
+    private final Random random = new Random();
+    private String defaultDate;
+    private String defaultPrice;
 
-    public MainFrame() {
+    /**
+     * Creates new GUI Controller
+     */
+    public FrameController() {
         //Default field parameters
-        LocalDate localDate = LocalDate.now();
-        localDate = localDate.plusYears(1);
-        String defaultDate = dateTimeFormat().format(localDate);
-        String defaultPrice = "1000";
+        setDefaultParameters();
 
         //Main setup
         setTitle("Code Generator");
@@ -44,7 +48,7 @@ public class MainFrame extends JFrame implements ActionListener {
         JPanel pnlNorth = new JPanel();
         JLabel lblHeadline = new JLabel("CODE GENERATOR");
         lblHeadline.setFont(new Font("Tw Cen MT", Font.BOLD, 60));
-        pnlNorth.setBorder(new EmptyBorder(0, 0, (int) (spacer / 2), 0));
+        pnlNorth.setBorder(new EmptyBorder(0, 0, spacer / 2, 0));
         pnlNorth.add(lblHeadline);
         pnlMain.add(pnlNorth, BorderLayout.NORTH);
 
@@ -73,6 +77,7 @@ public class MainFrame extends JFrame implements ActionListener {
         pnlMiddle.add(lblDate);
         pnlMiddle.add(txtDate);
         pnlMain.add(pnlMiddle, BorderLayout.CENTER);
+        setDefaultFieldParameters();
 
         //South
         JPanel pnlSouth = new JPanel();
@@ -92,9 +97,9 @@ public class MainFrame extends JFrame implements ActionListener {
         pnlSouth.add(pnlButtons, BorderLayout.CENTER);
         JPanel pnlCentered = new JPanel();
         pnlCentered.setLayout(new FlowLayout());
-        JLabel lblCopyright = new JLabel("\u00A9 Eduard Spousta for www.vonavyobchod.cz");
+        JLabel lblCopyright = new JLabel("© Eduard Spousta for www.vonavyobchod.cz");
         pnlCentered.add(lblCopyright);
-        pnlCentered.setBorder(new EmptyBorder((int) (spacer / 4), 0, 0, 0));
+        pnlCentered.setBorder(new EmptyBorder(spacer / 4, 0, 0, 0));
         pnlSouth.add(pnlCentered, BorderLayout.SOUTH);
         pnlMain.add(pnlSouth, BorderLayout.SOUTH);
 
@@ -106,6 +111,11 @@ public class MainFrame extends JFrame implements ActionListener {
         setVisible(true);
     }
 
+    /**
+     * Button click handler
+     * check if data are valid, passes the work on Editors (file/image)
+     * @param e the event to be processed
+     */
     @Override
     public void actionPerformed(ActionEvent e) {
         if (e.getSource() == btnConfirm) {
@@ -119,39 +129,60 @@ public class MainFrame extends JFrame implements ActionListener {
                     JOptionPane.showMessageDialog(this, "Out of price limit (100Kč - 10 000Kč)");
                     return;
                 }
-                data = new Data(
+
+                //Creates a new Object
+                Data data = new Data(
                         Integer.parseInt(txtPrice.getText()),
                         txtDate.getText(),
                         generateRandomSequence()
                 );
 
+                //Passes the object to the Editors
                 new ImageEditor(data);
                 new FileEditor(data);
 
-                //TODO: CONFIRMATION OF SUCCESS
+                //Close panel
+                dispose();
+
+                //If the code gets here it is always success because there are in each method RuntimeExceptions.
+                JOptionPane.showMessageDialog(this, "success");
+
+                //When click OK the app will terminate
+                System.exit(0);
+
 
             } catch (NumberFormatException numberFormatException) {
                 JOptionPane.showMessageDialog(this, "Please enter number as e.g. 1500");
-                txtPrice.setText("");
-                txtDate.setValue(null);
+                setDefaultFieldParameters();
             }
         }
         if (e.getSource() == btnReset) {
-            txtPrice.setText("");
-            txtDate.setValue(null);
+            setDefaultFieldParameters();
         }
 
     }
 
 
+    /**
+     * Date format for JFormattedTextField
+     * @return SimpleDateFormat dateFormat
+     */
     private SimpleDateFormat dateFormat() {
         return new SimpleDateFormat("dd.MM.yyyy");
     }
 
+    /**
+     * Date format for operation with Date
+     * @return DateTimeFormatter dateFormat
+     */
     private DateTimeFormatter dateTimeFormat() {
         return DateTimeFormatter.ofPattern("dd.MM.yyyy");
     }
 
+    /**
+     * Generating unique code sequence
+     * @return String sequence (e.g. 1234-ABED)
+     */
     private String generateRandomSequence() {
         StringBuilder sequenceBuilder = new StringBuilder();
         for (int i = 0; i < 9; i++) {
@@ -168,13 +199,42 @@ public class MainFrame extends JFrame implements ActionListener {
         return sequenceBuilder.toString();
     }
 
+    /**
+     * Generate RDM symbol
+     * @return char (a-z)
+     */
     private char generateRDMSymbol() {
         int letter = random.nextInt(26) + 'a';
         return Character.toUpperCase((char) letter);
     }
 
+    /**
+     * Generate RDM number
+     * @return int (0-9)
+     */
     private int generateRDMNumber() {
-        int number = random.nextInt(10);
-        return number;
+        return random.nextInt(10);
+    }
+
+    /**
+     * Generate default parameters
+     * Date - today + 1 Year
+     * Price - 1000
+     */
+    private void setDefaultParameters(){
+        LocalDate localDate;
+        localDate = LocalDate.now();
+        localDate = localDate.plusYears(1);
+        defaultDate = dateTimeFormat().format(localDate);
+        defaultPrice = "1000";
+    }
+
+    /**
+     * Insert generated parameters to txtFields
+     * @see #setDefaultParameters()
+     */
+    private void setDefaultFieldParameters(){
+        txtPrice.setText(defaultPrice);
+        txtDate.setText(defaultDate);
     }
 }

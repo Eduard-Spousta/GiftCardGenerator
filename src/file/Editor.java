@@ -3,20 +3,36 @@ package file;
 import java.io.File;
 import java.nio.file.Paths;
 
+/**
+ * Interface for EditorFiles
+ */
 public interface Editor {
-    default String findParentFile(){
+    /**
+     * Find Directory in which is Project located
+     * @return String path (e.g. /Users/Admin/Documents/.../...)
+     */
+    default String checkForDirectory(){
         String currentDir = Paths.get(".").toAbsolutePath().normalize().toString();
-        String projectDir = new File(currentDir).getParent();
-        return projectDir;
-    }
-    default boolean checkIfExists(File file) {
-        return file.exists();
+        return new File(currentDir).getParent();
     }
 
-    default File checkForDirectory(){
+    /**
+     * Check if file is exists
+     * @param file File to be checked
+     * @return true == do NOT exist
+     */
+    default boolean checkIfExists(File file) {
+        return !file.exists();
+    }
+
+    /**
+     * Find parent Directory in which is Project located
+     * @return String path (e.g. /Users/Admin/Documents/...)
+     */
+    default File findParentDirectory(){
         //Dynamic path to directory giftCards
-        File directory = new File(findParentFile(), "GiftCards");
-        if (!checkIfExists(directory))
+        File directory = new File(checkForDirectory(), "GiftCards");
+        if (checkIfExists(directory))
             directory.mkdir(); //creates directory
 
         return directory;

@@ -4,12 +4,21 @@ import model.Data;
 
 import java.io.*;
 
+/**
+ * Works with .CSV file
+ */
 public class FileEditor implements Editor {
+
+    /**
+     * Edit/Create new CSV file with given data
+     *
+     * @param data Data given by user
+     */
     public FileEditor(Data data) {
         try {
             //File ListGiftCards
-            File file = new File(checkForDirectory(), "ListGiftCards.csv");
-            if (!checkIfExists(file)) {
+            File file = new File(findParentDirectory(), "ListGiftCards.csv");
+            if (checkIfExists(file)) {
                 try {
                     //ADD NAME OF COLUMNS
                     FileWriter fileWriter = new FileWriter(file, true);
@@ -26,7 +35,7 @@ public class FileEditor implements Editor {
             FileWriter fileWriter = new FileWriter(file, true);
             BufferedWriter bufferedWriter = new BufferedWriter(fileWriter);
             bufferedWriter.newLine();
-            bufferedWriter.write(data.getVerificationCode() + "," + data.getExpirationDate() + "," + data.getPrice() + "," + "Ne");
+            bufferedWriter.write(data.verificationCode() + "," + data.expirationDate() + "," + data.price() + "," + "Ne");
             bufferedWriter.close();
 
         } catch (IOException e) {

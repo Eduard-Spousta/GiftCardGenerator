@@ -1,13 +1,15 @@
-import view.MainFrame;
+import view.FrameController;
 
-import java.util.Random;
+import javax.swing.*;
+
+/**
+ * @author Eduard Spousta
+ * @version 1.0
+ * @since 26.07.2023
+ */
 
 public class App {
     public static void main(String[] args) {
-        new MainFrame();
-
-        //TODO: MAKE .JAR APP
-        //TODO: /** */ comments
-        //TODO: REMOVE ALL WARNINGS
+        SwingUtilities.invokeLater(FrameController::new);
     }
 }
