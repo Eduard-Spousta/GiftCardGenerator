@@ -11,7 +11,7 @@ Project for www.vonavyobchod.cz
 
 **.JAR APP (For IntelliJ IDEA)**
 1. Clone the repository
-2. File -> Project Structre `CMD + U,` -> Libraries -> ` + ` -> ` downloaded library ` -> JAR -> SELECT ` From modules with dependecies ` -> Main Class ` Select App.java ` -> OK -> OK
+2. File -> Project Structre `CMD + U,` -> Artifacts -> ` + ` -> JAR -> SELECT ` From modules with dependecies ` -> Main Class ` Select App.java ` -> OK -> OK
 3. Build -> Build Artifacts -> Build
 4. Copy .JAR file `.../GiftCardGenerator/out/artifacts` to new package `(e.g. .../Documents/GiftCardApp)`
 5. Run .JAR app
